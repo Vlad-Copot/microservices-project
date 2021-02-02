@@ -18,9 +18,7 @@ app.get("/api/v1/cpus", async (req, res) => {
 
 // post endpoint, to create a new Cpu
 app.post("/api/v1/cpus", async (req, res) => {
-  //create an instance
   const cpu = new Cpu({ name: req.body.name });
-  //save it
   const savedCpu = await cpu.save();
   res.json(savedCpu);
 });

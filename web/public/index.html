@@ -56,12 +56,12 @@
 <body onload="initKeycloak()">
 <div>
   <h3>PC-Store</h3>
-  <h1>Add Cpu</h1>
+  <h1>Add Processor</h1>
   <form onsubmit="return API.saveCpu()">
     <input id="cpuname" type="text">
     <input type="submit" value="submit">
   </form>
-  <h1>Add Gpu</h1>
+  <h1>Add Graphics card</h1>
   <form onsubmit="return API.saveGpu()">
     <input id="gpuname" type="text">
     <input type="submit" value="submit">
@@ -76,28 +76,35 @@
   <form onsubmit="return API.searchGpu()">
     <input type="submit" value="Check GPU stock">
   </form>
+  <form onsubmit="return API.searchOnline()">
+    <input type="submit" value="Search online">
+  </form>
   <ul id="matches"></ul>
 </div>
-<!--  <script src="keycloak.json"></script>-->
   <script>
     parent.postMessage(location.href, location.origin)
   </script>
+<script src="http://localhost:8080/auth/js/keycloak.js"></script>
   <script>
-    function initKeycloak() {
-      var keycloak = new Keycloak({
-        "realm": "master",
-        "auth-server-url": "http://localhost:8080/auth/",
-        "ssl-required": "external",
-        "resource": "SoaClient",
-        "public-client": true,
-        "confidential-port": 0
-      });
-      keycloak.init({onLoad: 'login-required'}).then(function(authenticated) {
-        alert(authenticated ? 'authenticated' : 'not authenticated');
-      }).catch(function() {
-        alert('failed to initialize');
-      });
-    }
+      function initKeycloak() {
+        var keycloak = new Keycloak({
+          "url": "http://localhost:8080/auth/js/keycloak.js",
+          "realm": "master",
+          "clientId": "SoaClient",
+          "auth-server-url": "http://localhost:8080/auth/",
+          "ssl-required": "external",
+          "resource": "SoaClient",
+          "public-client": true,
+          "confidential-port": 0
+        });
+        keycloak.init({onLoad: 'check-sso',
+          silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'}, 'login-required', {adapter: 'cordova-native'})
+                .then(function(authenticated) {
+          alert(authenticated ? 'authenticated' : 'not authenticated');
+        }).catch(function() {
+          alert('failed to initialize');
+        });
+      }
   </script>
   <script>
     const API = (() => {
@@ -196,12 +203,37 @@
         return false;
       };
 
+      const searchOnline = () => {
+        try {
+          fetch("https://api.mocki.io/v1/de73b8e6")
+                  .then(resp => resp.json())
+                  .then(results => {
+                    const ul = document.querySelector("#matches");
+                    ul.innerHTML = `<h2>Current Stock:</h2>`;
+                    results.forEach(data => {
+                      const li = document.createElement("li");
+                      const liContent = `
+                  <p>Product Name: ${data.name}</p>
+                  <p>Product Type: ${data.type}</p>
+                `;
+                      li.innerHTML = liContent;
+                      ul.appendChild(li);
+                    });
+                  });
+        } catch (e) {
+          console.log(e);
+          console.log('--------------------------');
+        }
+        return false;
+      };
+
       return {
         saveGpu: makeSaveFunc("#gpuname", postGpuName),
         saveCpu: makeSaveFunc("#cpuname", postCpuName),
         search,
         searchCpu,
-        searchGpu
+        searchGpu,
+        searchOnline
       }
     })();
   </script>

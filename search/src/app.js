@@ -43,4 +43,17 @@ app.get("/api/v1/search/gpu", async (req, res) => {
   }
 });
 
+app.get("/api/v1/search/online-products", async (req, res) => {
+  try {
+    const gpuPromise = fetch("https://api.mocki.io/v1/de73b8e6");
+    const promises = [gpuPromise];
+    const [gpuResponse] = await Promise.all(promises);
+    const gpuJson = await gpuResponse.json();
+
+    res.json({ gpuJson });
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
 module.exports = app;
