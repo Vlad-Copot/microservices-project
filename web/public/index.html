@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Store</title>
+  <style>
+    #matches {
+      margin: auto;
+      display: inline-block;
+      width: 50%;
+      background-color: bisque;
+      text-align: center;
+    }
+    input[type=text] {
+      width: 50%;
+      padding: 12px 20px;
+      margin: auto;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    input[type=submit] {
+      width: 50%;
+      background-color: dodgerblue;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type=submit]:hover {
+      background-color: black;
+    }
+    div {
+      width: 80%;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+      margin: auto;
+      align-items: center;
+    }
+    body {
+      text-align: center;
+    }
+    h3 {
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body onload="initKeycloak()">
+<div>
+  <h3>PC-Store</h3>
+  <h1>Add Cpu</h1>
+  <form onsubmit="return API.saveCpu()">
+    <input id="cpuname" type="text">
+    <input type="submit" value="submit">
+  </form>
+  <h1>Add Gpu</h1>
+  <form onsubmit="return API.saveGpu()">
+    <input id="gpuname" type="text">
+    <input type="submit" value="submit">
+  </form>
+  <h1>Check store stock</h1>
+  <form onsubmit="return API.search()">
+    <input type="submit" value="Check stock">
+  </form>
+  <ul id="matches"></ul>
+</div>
+<!--  <script src="keycloak.json"></script>-->
+  <script>
+    parent.postMessage(location.href, location.origin)
+  </script>
+  <script>
+    function initKeycloak() {
+      var keycloak = new Keycloak({
+        "realm": "master",
+        "auth-server-url": "http://localhost:8080/auth/",
+        "ssl-required": "external",
+        "resource": "SoaClient",
+        "public-client": true,
+        "confidential-port": 0
+      });
+      keycloak.init({onLoad: 'login-required'}).then(function(authenticated) {
+        alert(authenticated ? 'authenticated' : 'not authenticated');
+      }).catch(function() {
+        alert('failed to initialize');
+      });
+    }
+  </script>
+  <script>
+    const API = (() => {
+      const makeSaveFunc = (selector, postNameFunc) => () => {
+        try {
+          const val = document.querySelector(selector).value;
+          postNameFunc(val);
+        } catch (e) {
+          console.log(e);
+          console.log('--------------------------');
+        }
+        return false;
+      };
+
+      const makePostNameFunc = uri => val => {
+        fetch(uri, {
+          method: 'POST',
+          body: JSON.stringify({ name: val }),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+      };
+
+      const postGpuName = makePostNameFunc("http://localhost:9080/api/v1/gpus");
+      const postCpuName = makePostNameFunc("http://localhost:9080/api/v1/cpus");
+
+      const search = () => {
+        try {
+          fetch("http://localhost:9080/api/v1/search")
+            .then(resp => resp.json())
+            .then(results => {
+              const ul = document.querySelector("#matches");
+              ul.innerHTML = `<h2>Current Stock:</h2>`;
+              results.forEach(data => {
+                const li = document.createElement("li");
+                const liContent = `
+                  <p>Product Name: ${data.name}</p>
+                  <p>Product Type: ${data.type}</p>
+                `;
+                li.innerHTML = liContent;
+                ul.appendChild(li);
+              });
+            });
+        } catch (e) {
+          console.log(e);
+          console.log('--------------------------');
+        }
+        return false;
+      };
+
+      return {
+        saveGpu: makeSaveFunc("#gpuname", postGpuName),
+        saveCpu: makeSaveFunc("#cpuname", postCpuName),
+        search
+      }
+    })();
+  </script>
+</body>
+</body>
+
+</html>
