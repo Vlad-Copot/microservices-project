@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="31a33274-c35a-415f-b001-1fed2ae9adbd" name="Default Changelist" comment="" />
+    <list default="true" id="31a33274-c35a-415f-b001-1fed2ae9adbd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cpus/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/cpus/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cpus/src/config/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/cpus/src/config/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/default.conf" beforeDir="false" afterPath="$PROJECT_DIR$/default.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/search/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/public/index.html" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +38,9 @@
     <expand />
     <select />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="JsFlowSettings">
     <service-enabled>true</service-enabled>
     <exe-path />
@@ -40,7 +51,9 @@
     <option name="version" value="1" />
   </component>
   <component name="ProjectId" id="1nnHqR4gZKu2XgE1Budcx2TpVgn" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -81,11 +94,22 @@
       <workItem from="1612192777483" duration="3838000" />
       <workItem from="1612196793548" duration="2453000" />
       <workItem from="1612199922614" duration="11731000" />
-      <workItem from="1612254209955" duration="593000" />
+      <workItem from="1612254209955" duration="5666000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

@@ -70,6 +70,12 @@
   <form onsubmit="return API.search()">
     <input type="submit" value="Check stock">
   </form>
+  <form onsubmit="return API.searchCpu()">
+    <input type="submit" value="Check CPU stock">
+  </form>
+  <form onsubmit="return API.searchGpu()">
+    <input type="submit" value="Check GPU stock">
+  </form>
   <ul id="matches"></ul>
 </div>
 <!--  <script src="keycloak.json"></script>-->
@@ -144,10 +150,58 @@
         return false;
       };
 
+      const searchGpu = () => {
+        try {
+          fetch("http://localhost:9080/api/v1/search/gpu")
+                  .then(resp => resp.json())
+                  .then(results => {
+                    const ul = document.querySelector("#matches");
+                    ul.innerHTML = `<h2>Current Stock:</h2>`;
+                    results.gpuJson.forEach(data => {
+                      const li = document.createElement("li");
+                      const liContent = `
+                  <p>Product Name: ${data.name}</p>
+                `;
+                      li.innerHTML = liContent;
+                      ul.appendChild(li);
+                    });
+                  });
+        } catch (e) {
+          console.log(e);
+          console.log('--------------------------');
+        }
+        return false;
+      };
+
+      const searchCpu = () => {
+        try {
+          fetch("http://localhost:9080/api/v1/search/cpu")
+                  .then(resp => resp.json())
+                  .then(results => {
+                    const ul = document.querySelector("#matches");
+                    ul.innerHTML = `<h2>Current Stock:</h2>`;
+                    results.cpuJson.forEach(data => {
+                      const li = document.createElement("li");
+                      const liContent = `
+                  <p>Product Name: ${data.name}</p>
+                `;
+                      li.innerHTML = liContent;
+                      ul.appendChild(li);
+                    });
+                  });
+        } catch (e) {
+          console.log(e);
+          console.log('--------------------------');
+        }
+        return false;
+      };
+
       return {
         saveGpu: makeSaveFunc("#gpuname", postGpuName),
         saveCpu: makeSaveFunc("#cpuname", postCpuName),
-        search
+        search,
+        searchCpu,
+        searchGpu
       }
     })();
   </script>
